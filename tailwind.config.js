@@ -7,6 +7,7 @@ export default {
  
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./**.html"
   ],
   theme: {
     extend: {},
