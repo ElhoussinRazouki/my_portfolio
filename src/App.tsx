@@ -21,7 +21,7 @@ function App() {
           <button className="bg-gray-800 text-white px-4 py-2 bg-opacity-60 rounded-lg mt-2 hover:bg-gray-700 transition duration-300 flex justify-center items-center w-2/4 sm:w-3/5 gap-2" onClick={handleGithubProfileClick}><AiOutlineGithub/> GitHub </button>
         </div>
       </div>
-      <div className="absolute bottom-4 left-4 p-2 text-white bg-gray-200 bg-opacity-10 rounded-md flex items-center gap-2 -z-0">
+      <div className="absolute bottom-4 left-4 p-2 text-white bg-gray-200 bg-opacity-10 rounded-md flex items-center gap-2 -z-0 animate-pulse cursor-pointer">
       <IoConstructSharp/>
       under construction
       </div>
