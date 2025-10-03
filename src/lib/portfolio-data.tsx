@@ -16,6 +16,11 @@ import {
 import { AuroraText } from "@/components/ui/aurora-text";
 import { Highlighter } from "@/components/ui/highlighter";
 
+export const personalInfo = {
+  name: "El Houssin Razouki",
+  image: "https://lh3.googleusercontent.com/a/ACg8ocLwLdSfciBxubaHezLLfg6h4hhB5uFz8HF3BFTCFctCJt_7gMVm=s576-c-no",
+};
+
 export const skills = [
   {
     title: "Frontend",
