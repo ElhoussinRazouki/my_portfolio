@@ -16,7 +16,7 @@ const getIconSrc = (title: string) => {
   const iconMap: Record<string, string> = {
     "Fat AI - Body Fat Percentage": "fatai",
     Mobtwin: "mobtwin",
-    "Pixzels AI - Thumbnail Maker": "pixzels",
+    "Viralth - AI Thumbnail Maker": "viralthum",
   };
   const iconName = iconMap[title];
   return iconName ? `/icons/${iconName}.png` : null;

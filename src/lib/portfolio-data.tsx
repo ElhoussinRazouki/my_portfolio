@@ -273,14 +273,14 @@ export const projects = [
     website: "https://www.mobtwin.com",
   },
   {
-    title: "Pixzels AI - Thumbnail Maker",
+    title: "Viralth - AI Thumbnail Maker",
     description:
-      "Built and launched Pixzels AI Thumbnail Maker, an iOS app for AI-powered thumbnail creation using React Native for mobile, Node.js for APIs, GPT-Image1 for image generation, and AWS S3 for storage. Implemented AI-driven thumbnail design, personalized suggestions, and real-time editing to enhance user creativity and engagement.",
+      "Built and launched Viralth - AI Thumbnail Maker, an iOS app for AI-powered thumbnail creation using React Native for mobile, Node.js for APIs, GPT-Image1 for image generation, and AWS S3 for storage. Implemented AI-driven thumbnail design, personalized suggestions, and real-time editing to enhance user creativity and engagement.",
     icon: Code,
-    preview: "/video/pixzels.mp4",
+    preview: "/video/viralthumb.mp4",
     previewType: "video",
     appstore:
-      "https://apps.apple.com/us/app/pixzels-ai-thumbnail-maker/id6744122688?platform=iphone",
+      "https://apps.apple.com/us/app/viralth-ai-thumbnail-maker/id6744122688?platform=iphone",
   },
   {
     title: "Fat AI - Body Fat Percentage",
