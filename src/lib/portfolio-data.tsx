@@ -287,7 +287,7 @@ export const projects = [
     description:
       "Built and launched Fat AI, an iOS app for body fat tracking using React Native for mobile, Node.js for APIs, LLMs for chat and vision, and AWS S3 for storage. Implemented AI-driven body fat analysis, personalized fitness plans, and real-time progress tracking to enhance user health and engagement.",
     icon: Code,
-    preview: "/images/fatai.png",
+    preview: "/images/fatai.PNG",
     previewType: "image",
     appstore:
       "https://apps.apple.com/us/app/fat-ai-body-fat-percentage/id6739364929?platform=iphone",
