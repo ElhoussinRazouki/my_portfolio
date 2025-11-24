@@ -264,15 +264,6 @@ export const experienceData = [
 
 export const projects = [
   {
-    title: "Mobtwin",
-    description:
-      "Built and launched Mobtwin, a web platform for tracking mobile app states across Google Play and App Store for statistics and analytics. Developed a user-friendly search engine for millions of apps, enabling horizontal scaling with Node.js workers, automated CI deployments, and managed MongoDB replica sets. Leveraged TypeScript, React, Redux, GraphQL, MongoDB, Elasticsearch, and web scraping to deliver real-time data and enhanced user experiences.",
-    icon: Smartphone,
-    preview: "https://www.mobtwin.com",
-    previewType: "link",
-    website: "https://www.mobtwin.com",
-  },
-  {
     title: "Viralth - AI Thumbnail Maker",
     description:
       "Built and launched Viralth - AI Thumbnail Maker, an iOS app for AI-powered thumbnail creation using React Native for mobile, Node.js for APIs, GPT-Image1 for image generation, and AWS S3 for storage. Implemented AI-driven thumbnail design, personalized suggestions, and real-time editing to enhance user creativity and engagement.",
@@ -283,11 +274,20 @@ export const projects = [
       "https://apps.apple.com/us/app/viralth-ai-thumbnail-maker/id6744122688?platform=iphone",
   },
   {
+    title: "Mobtwin",
+    description:
+      "Built and launched Mobtwin, a web platform for tracking mobile app states across Google Play and App Store for statistics and analytics. Developed a user-friendly search engine for millions of apps, enabling horizontal scaling with Node.js workers, automated CI deployments, and managed MongoDB replica sets. Leveraged TypeScript, React, Redux, GraphQL, MongoDB, Elasticsearch, and web scraping to deliver real-time data and enhanced user experiences.",
+    icon: Smartphone,
+    preview: "/images/mobtwin.png",
+    previewType: "image",
+    website: "https://www.mobtwin.com",
+  },
+  {
     title: "Fat AI - Body Fat Percentage",
     description:
       "Built and launched Fat AI, an iOS app for body fat tracking using React Native for mobile, Node.js for APIs, LLMs for chat and vision, and AWS S3 for storage. Implemented AI-driven body fat analysis, personalized fitness plans, and real-time progress tracking to enhance user health and engagement.",
     icon: Code,
-    preview: "/images/fatai.PNG",
+    preview: "/images/fatai.png",
     previewType: "image",
     appstore:
       "https://apps.apple.com/us/app/fat-ai-body-fat-percentage/id6739364929?platform=iphone",

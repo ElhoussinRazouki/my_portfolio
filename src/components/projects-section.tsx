@@ -15,7 +15,7 @@ import { useMemo, useState } from "react";
 const getIconSrc = (title: string) => {
   const iconMap: Record<string, string> = {
     "Fat AI - Body Fat Percentage": "fatai",
-    Mobtwin: "mobtwin",
+    "Mobtwin": "mobtwin",
     "Viralth - AI Thumbnail Maker": "viralthum",
   };
   const iconName = iconMap[title];
