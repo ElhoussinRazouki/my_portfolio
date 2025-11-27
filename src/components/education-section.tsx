@@ -71,10 +71,7 @@ const EducationSection = () => {
                 const pdf = getCertPdf(cert.name);
                 return (
                   <MorphingDialog key={index}>
-                    <MorphingDialogTrigger
-                      className="w-full"
-                      onClick={() => handleCertClick(cert.name, cert.link)}
-                    >
+                    <MorphingDialogTrigger className="w-full">
                       <BentoCard
                         name={cert.name}
                         className="col-span-1"
