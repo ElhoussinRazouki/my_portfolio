@@ -1,13 +1,19 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Code, Smartphone, Settings } from "lucide-react";
 import { ReactNode } from "react";
+import { trackSectionView } from "@/lib/analytics";
 
 // Skills Section
 const SkillsSection = () => {
+  const handleSkillHover = (skillName: string) => {
+    trackSectionView(`skills_${skillName}`);
+  };
+
   return (
     <section
       id="skills"
       className="py-16 md:py-32 dark:bg-transparent min-h-screen flex items-center justify-center"
+      onMouseEnter={() => trackSectionView("skills")}
     >
       <div className="@container mx-auto max-w-5xl px-6 w-full">
         <div className="text-center">
@@ -17,7 +23,10 @@ const SkillsSection = () => {
           <p className="mt-4">My technical expertise and proficiencies.</p>
         </div>
         <div className="@min-4xl:max-w-full @min-4xl:grid-cols-3 mx-auto mt-8 grid max-w-sm gap-6 *:text-center md:mt-16">
-          <Card className="group shadow-zinc-950/5">
+          <Card
+            className="group shadow-zinc-950/5"
+            onMouseEnter={() => handleSkillHover("full_stack")}
+          >
             <CardHeader>
               <CardDecorator>
                 <Code className="size-6" aria-hidden />
@@ -27,10 +36,6 @@ const SkillsSection = () => {
             </CardHeader>
 
             <CardContent>
-              {/* Frontend: React, Next.js, TypeScript, Tailwind CSS, HTML5, CSS
-              Backend: Node.js, GraphQL, Python, Django, PHP, SQL
-              Databases: MongoDB, MySQL, SQL Server, Elasticsearch
-              DevOps: Docker, AWS, Linux, Bash, Git */}
               <p className="text-sm">
                 Experienced in full-stack web development with modern
                 technologies.
@@ -38,7 +43,10 @@ const SkillsSection = () => {
             </CardContent>
           </Card>
 
-          <Card className="group shadow-zinc-950/5">
+          <Card
+            className="group shadow-zinc-950/5"
+            onMouseEnter={() => handleSkillHover("mobile")}
+          >
             <CardHeader>
               <CardDecorator>
                 <Smartphone className="size-6" aria-hidden />
@@ -48,7 +56,6 @@ const SkillsSection = () => {
             </CardHeader>
 
             <CardContent>
-              {/* React Native, Android SDK, Java */}
               <p className="text-sm">
                 Skilled in mobile app development using React Native and native
                 technologies.
@@ -56,7 +63,10 @@ const SkillsSection = () => {
             </CardContent>
           </Card>
 
-          <Card className="group shadow-zinc-950/5">
+          <Card
+            className="group shadow-zinc-950/5"
+            onMouseEnter={() => handleSkillHover("additional")}
+          >
             <CardHeader>
               <CardDecorator>
                 <Settings className="size-6" aria-hidden />
@@ -66,7 +76,6 @@ const SkillsSection = () => {
             </CardHeader>
 
             <CardContent>
-              {/* C++, C#, AI Agents, Web Scraping, Networking */}
               <p className="text-sm">
                 Proficient in additional technologies including Automation and
                 AI.

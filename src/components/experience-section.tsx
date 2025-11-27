@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
 import { AuroraText } from "@/components/ui/aurora-text";
 import { experienceData } from "@/lib/portfolio-data";
 import { Highlighter } from "./ui/highlighter";
+import { trackSectionView } from "@/lib/analytics";
 
 // Experience Section
 const ExperienceSection = () => {
@@ -10,6 +13,7 @@ const ExperienceSection = () => {
     <section
       id="experience"
       className="py-16 md:py-32 dark:bg-transparent min-h-screen flex items-center justify-center"
+      onMouseEnter={() => trackSectionView("experience")}
     >
       <div className="@container mx-auto max-w-5xl px-6 w-full">
         <div className="text-center">

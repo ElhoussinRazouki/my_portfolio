@@ -11,11 +11,16 @@ import { projects } from "@/lib/portfolio-data";
 import { Highlighter } from "./ui/highlighter";
 import { Iphone } from "./ui/iphone";
 import { useMemo, useState } from "react";
+import {
+  trackProjectInteraction,
+  trackLinkClick,
+  trackSectionView,
+} from "@/lib/analytics";
 
 const getIconSrc = (title: string) => {
   const iconMap: Record<string, string> = {
     "Fat AI - Body Fat Percentage": "fatai",
-    "Mobtwin": "mobtwin",
+    Mobtwin: "mobtwin",
     "Viralth - AI Thumbnail Maker": "viralthum",
   };
   const iconName = iconMap[title];
@@ -31,6 +36,22 @@ const ProjectsSection = () => {
       (activeProject.appstore || activeProject.title === "Video Generator")) ||
       (activeProject.previewType === "image" && activeProject.appstore));
 
+  const handleProjectClick = (projectName: string) => {
+    trackProjectInteraction(projectName, "open");
+    setActiveItem(
+      projects.findIndex((p) => p.title === projectName).toString()
+    );
+  };
+
+  const handleProjectLinkClick = (
+    projectName: string,
+    linkType: string,
+    url: string
+  ) => {
+    trackProjectInteraction(projectName, "click");
+    trackLinkClick(url, `${projectName} - ${linkType}`, true);
+  };
+
   const renderPreview = (project: (typeof projects)[0]) => {
     if (project.title === "MerchGhost") {
       return (
@@ -40,6 +61,9 @@ const ProjectsSection = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 underline text-center"
+            onClick={() =>
+              handleProjectLinkClick(project.title, "preview", project.preview)
+            }
           >
             Visit {project.title}
           </a>
@@ -103,7 +127,11 @@ const ProjectsSection = () => {
   );
 
   return (
-    <section id="projects" className="py-12 md:py-20 lg:py-32 min-h-screen">
+    <section
+      id="projects"
+      className="py-12 md:py-20 lg:py-32 min-h-screen"
+      onMouseEnter={() => trackSectionView("projects")}
+    >
       <div className="bg-linear-to-b absolute inset-0 -z-10 sm:inset-6 sm:rounded-b-3xl dark:block dark:to-[color-mix(in_oklab,var(--color-zinc-900)_75%,var(--color-background))]"></div>
       <div className="mx-auto max-w-7xl space-y-8 px-6 md:space-y-16 lg:space-y-20 dark:[--color-border:color-mix(in_oklab,var(--color-white)_10%,transparent)]">
         <div className="relative z-10 mx-auto max-w-2xl space-y-6 text-center">
@@ -117,7 +145,10 @@ const ProjectsSection = () => {
           <Accordion
             type="single"
             value={activeItem}
-            onValueChange={(value) => setActiveItem(value)}
+            onValueChange={(value) => {
+              setActiveItem(value);
+              trackProjectInteraction(projects[parseInt(value)].title, "view");
+            }}
             className="w-full"
           >
             {projects.map((project, index) => {
@@ -149,6 +180,13 @@ const ProjectsSection = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700 underline transition-colors"
+                            onClick={() =>
+                              handleProjectLinkClick(
+                                project.title,
+                                "website",
+                                project.website
+                              )
+                            }
                           >
                             Visit Website
                           </a>
@@ -159,6 +197,13 @@ const ProjectsSection = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700 underline transition-colors"
+                            onClick={() =>
+                              handleProjectLinkClick(
+                                project.title,
+                                "github",
+                                project.github
+                              )
+                            }
                           >
                             View on GitHub
                           </a>
@@ -169,6 +214,13 @@ const ProjectsSection = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700 underline transition-colors"
+                            onClick={() =>
+                              handleProjectLinkClick(
+                                project.title,
+                                "appstore",
+                                project.appstore
+                              )
+                            }
                           >
                             Download on App Store
                           </a>

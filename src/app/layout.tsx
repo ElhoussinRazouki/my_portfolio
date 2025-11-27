@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import GlobalNavbar from "@/components/global-navbar";
 import { personalInfo } from "@/lib/portfolio-data";
@@ -36,13 +37,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         <GlobalNavbar />
         {children}
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
+        )}
       </body>
     </html>
   );
