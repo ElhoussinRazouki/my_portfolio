@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# El Houssin Razouki — Portfolio
 
-## Getting Started
+A single-page portfolio built with **Vite + React + TypeScript** and plain CSS. The look is a notebook or scrapbook: lined paper, handwritten notes, washi tape, polaroids and folder-tab project cards.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # production build in dist/
+npm run preview  # serve the build locally
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Edit content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All copy lives in **`src/data/content.ts`**: profile, about, projects, experience, skills, education and certifications. Components only handle layout.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Add your images
 
-## Learn More
+1. Put files in `public/` (for example `public/me.jpg` or `public/projects/aevo-1.png`).
+2. Reference them in `content.ts` with a leading slash:
+   - `profile.photo = '/me.jpg'`
+   - `profile.deskPhoto = '/desk.jpg'`
+   - `projects[i].media.images = ['/projects/aevo-1.png', '/projects/aevo-2.png']`
 
-To learn more about Next.js, take a look at the following resources:
+Any slot left empty shows a striped placeholder with its label.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### To-dos
+- Add the App Store links for Aevo and Study Time (`href` in `content.ts`). The "View project" link only appears when `href` is set.
+- `public/El_Houssin_Razouki_Resume.pdf` powers the "Download CV" button. Replace it whenever the CV changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
+```
+src/
+  data/content.ts          ← all text, links and image paths
+  styles/global.css        ← design tokens (colors, fonts) and all styles
+  hooks/useActiveSection.ts← highlights the current nav tab while scrolling
+  components/
+    Nav, Hero, About, Projects, ProjectCard,
+    Experience, Skills, Education, Contact
+    Decor.tsx              ← Tape, ImageSlot, Polaroid, SectionHeading
+    Icons.tsx              ← inline SVG icons
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design tokens
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Colors and fonts are CSS variables at the top of `global.css` (`--yellow`, `--blue`, `--pink`, `--mint`, `--ink`, ...).
+Fonts come from Google Fonts: **Silkscreen** (pixel display), **Gochi Hand** (handwriting), **Inter** (body) and **Space Mono** (labels).
+
+## Deploy
+
+It's a static site. On Vercel or Netlify, import the repo with the Vite preset: build command `npm run build`, output folder `dist`.
