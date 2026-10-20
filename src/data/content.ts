@@ -239,13 +239,34 @@ export const education = [
   },
 ]
 
+/** Each certificate opens in a viewer: `image` is shown, `pdf` is the download. */
 export const certifications = {
   issuer: 'Cisco Networking Academy',
   items: [
-    { name: 'JavaScript Essentials', color: 'var(--yellow)' },
-    { name: 'PCAP: Programming Essentials in Python', color: 'var(--green-bright)' },
-    { name: 'IT Essentials', color: 'var(--pink-soft)' },
-    { name: 'NDG Linux Essentials', color: 'var(--blue-soft)' },
+    {
+      name: 'JavaScript Essentials',
+      color: 'var(--yellow)',
+      image: '/certificates/javascript-essentials.jpg',
+      pdf: '/certificates/javascript-essentials.pdf',
+    },
+    {
+      name: 'PCAP: Programming Essentials in Python',
+      color: 'var(--green-bright)',
+      image: '/certificates/programming-essentials.jpg',
+      pdf: '/certificates/programming-essentials.pdf',
+    },
+    {
+      name: 'IT Essentials',
+      color: 'var(--pink-soft)',
+      image: '/certificates/it-essentials.jpg',
+      pdf: '/certificates/it-essentials.pdf',
+    },
+    {
+      name: 'NDG Linux Essentials',
+      color: 'var(--blue-soft)',
+      image: '/certificates/linux-essentials.jpg',
+      pdf: '/certificates/linux-essentials.pdf',
+    },
   ],
 }
 

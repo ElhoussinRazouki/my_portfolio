@@ -991,6 +991,7 @@ div.image-slot {
 }
 .sticky-note {
   position: absolute;
+  z-index: 2;
   right: 8%;
   bottom: 40px;
   padding: 10px 14px;
@@ -1152,14 +1153,48 @@ div.image-slot {
 .certs {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
   margin-top: 16px;
   font-size: 15px;
 }
-.certs li {
+.certs__item {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  margin: 0 -8px;
+  padding: 6px 8px;
+  box-sizing: content-box;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.certs__item:hover {
+  background: var(--yellow-soft);
+}
+.certs__name {
+  flex: 1;
+}
+.certs__view {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+.certs__item:hover .certs__view {
+  color: var(--ink);
+}
+.certs__item svg {
+  transition: transform 0.15s;
+}
+.certs__item:hover .certs__view svg {
+  transform: translate(2px, -2px);
 }
 .certs__swatch {
   flex: none;
@@ -1259,4 +1294,149 @@ div.image-slot {
   padding: 22px 4px 0;
   font-size: 10px;
   color: var(--muted);
+}
+
+/* ==========================================================================
+   Taped sheet (certificate + project previews)
+   ========================================================================== */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgba(27, 26, 24, 0.55);
+  backdrop-filter: blur(4px);
+}
+.sheet-dialog {
+  width: min(920px, 100%);
+  margin: auto;
+}
+.sheet-dialog__paper {
+  position: relative;
+  padding: 14px 14px 0;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+.sheet-dialog__frame {
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+}
+.sheet-dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 20px;
+  padding: 16px 4px 18px;
+}
+.sheet-dialog__kicker {
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+.sheet-dialog__title {
+  margin-top: 2px;
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.sheet-dialog__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sheet-dialog .pill-btn:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.sheet-dialog__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.sheet-dialog__close:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* Certificate: landscape page */
+.sheet-dialog--cert .sheet-dialog__frame {
+  aspect-ratio: 930 / 630;
+}
+.sheet-dialog__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Web app: the browser window, sized so window + footer fit the viewport height */
+.sheet-dialog--browser {
+  width: min(1120px, 100%, calc((100vh - 230px) * 1.6 + 60px));
+}
+.sheet-dialog--browser .sheet-dialog__frame {
+  padding: clamp(12px, 3vw, 28px);
+}
+
+/* Mobile app: phones side by side, each as tall as the viewport allows */
+.sheet-dialog--phones {
+  width: auto;
+  max-width: 100%;
+}
+.sheet-dialog--phones .sheet-dialog__frame {
+  padding: clamp(16px, 3vw, 32px);
+}
+.preview-phones {
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 32px);
+}
+.preview-phones .phone {
+  --w: min(300px, calc((100vh - 290px) * 0.45), calc((100vw - 120px) / var(--count) - 16px));
+}
+
+/* Click-to-preview layer over a project's media */
+.media-zoom {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 12px;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.media-zoom__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.media-zoom:hover .media-zoom__hint,
+.media-zoom:focus-visible .media-zoom__hint {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .media-zoom__hint {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -7,25 +7,59 @@ import { ease, fadeUp, spring, springSoft, stagger, stampIn, viewport } from './
 
 type TapeColor = 'blue' | 'yellow' | 'white' | 'clear'
 
-/** A strip of washi tape that "sticks" on when scrolled into view. Position it with `style`. */
+/** How long one strip takes to peel off. */
+export const PEEL_DURATION = 0.32
+
+/**
+ * A strip of washi tape that "sticks" on when scrolled into view: it is smoothed down from one
+ * end (a clip reveal, so it never moves off its spot). Position it with `style`; it rotates
+ * around its centre, so `rotate` tilts it in place.
+ *
+ * Set `peel` to the side its outer end points (-1 left, 1 right) and it can be removed inside
+ * AnimatePresence: the outer end lifts and curls around the still-stuck inner end, then the
+ * strip is pulled up and away. It is laid down from that same inner end, so on and off mirror.
+ */
 export function Tape({
   color = 'clear',
   rotate = 0,
   delay = 0.3,
+  peel,
+  peelDelay = 0,
   style,
 }: {
   color?: TapeColor
   rotate?: number
   delay?: number
+  peel?: -1 | 1
+  peelDelay?: number
   style?: CSSProperties
 }) {
+  const dir = peel ?? 1
+  // Laid from the left end, or from the inner end when it can be peeled.
+  const hidden = dir === -1 && peel ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)'
   return (
     <motion.span
       aria-hidden="true"
       className={`tape tape--${color}`}
-      style={{ ...style, rotate, originX: 0 }}
-      initial={{ opacity: 0, scaleX: 0.2, scaleY: 1.4 }}
-      whileInView={{ opacity: 1, scaleX: 1, scaleY: 1 }}
+      style={{ ...style, rotate, originX: peel ? (dir === -1 ? 1 : 0) : 0.5 }}
+      initial={{ opacity: 0, clipPath: hidden, scaleY: 1.4 }}
+      whileInView={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0%)', scaleY: 1 }}
+      exit={
+        peel && {
+          rotate: [rotate, rotate - dir * 14, rotate - dir * 26],
+          x: [0, 0, dir * 40],
+          y: [0, -5, -38],
+          scale: [1, 1.06, 1.1],
+          filter: ['drop-shadow(0 0 0 rgba(0,0,0,0))', 'drop-shadow(0 5px 4px rgba(0,0,0,0.18))', 'drop-shadow(0 8px 6px rgba(0,0,0,0.12))'],
+          opacity: [1, 1, 0],
+          transition: {
+            duration: PEEL_DURATION,
+            delay: peelDelay,
+            times: [0, 0.45, 1],
+            ease: ['easeOut', 'easeIn'],
+          },
+        }
+      }
       viewport={viewport}
       transition={{ duration: 0.45, ease, delay }}
     />

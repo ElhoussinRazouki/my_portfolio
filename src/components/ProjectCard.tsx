@@ -1,13 +1,14 @@
 'use client'
 
 import { motion, useReducedMotion, useScroll, useTransform, type Variants } from 'motion/react'
-import { useRef, type CSSProperties } from 'react'
+import { useRef, useState, type CSSProperties } from 'react'
 import type { Project, ProjectTheme } from '../data/content'
 import { useTilt } from '../hooks/usePointer'
 import { CountUp } from './CountUp'
 import { ImageSlot, Tape } from './Decor'
 import { ArrowUpRightIcon } from './Icons'
 import { ease, fadeUp, spring, stagger, viewport } from './motion'
+import { PreviewTrigger, ProjectPreview } from './ProjectPreview'
 
 const themes: Record<ProjectTheme, CSSProperties> = {
   dark: {
@@ -76,7 +77,7 @@ function Phone({ label, src, index }: { label: string; src?: string; index: numb
   )
 }
 
-function Browser({ project }: { project: Project }) {
+function Browser({ project, onOpen }: { project: Project; onOpen: () => void }) {
   const { media, theme } = project
   const tilt = useTilt(5)
   const { ref, y } = useParallax(36)
@@ -105,12 +106,13 @@ function Browser({ project }: { project: Project }) {
           tone={light ? 'mint' : 'dark'}
           className="browser__screen"
         />
+        <PreviewTrigger project={project} onOpen={onOpen} />
       </motion.div>
     </motion.div>
   )
 }
 
-function Phones({ project }: { project: Project }) {
+function Phones({ project, onOpen }: { project: Project; onOpen: () => void }) {
   const { media } = project
   const { ref, y } = useParallax(36)
 
@@ -119,6 +121,7 @@ function Phones({ project }: { project: Project }) {
       {media.labels.map((label, i) => (
         <Phone key={label} label={label} src={media.images?.[i]} index={i} />
       ))}
+      <PreviewTrigger project={project} onOpen={onOpen} />
       {project.note && (
         <motion.p
           className="hand sticky-note"
@@ -135,7 +138,15 @@ function Phones({ project }: { project: Project }) {
 }
 
 function Media({ project }: { project: Project }) {
-  return project.media.kind === 'browser' ? <Browser project={project} /> : <Phones project={project} />
+  const [open, setOpen] = useState(false)
+  const onOpen = () => setOpen(true)
+
+  return (
+    <>
+      {project.media.kind === 'browser' ? <Browser project={project} onOpen={onOpen} /> : <Phones project={project} onOpen={onOpen} />}
+      <ProjectPreview project={project} open={open} onClose={() => setOpen(false)} />
+    </>
+  )
 }
 
 const chip: Variants = {

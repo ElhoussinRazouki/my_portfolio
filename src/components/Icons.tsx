@@ -143,3 +143,15 @@ export const navIcons = {
   grid: GridIcon,
   diamond: DiamondIcon,
 }
+
+export const CloseIcon = ({ size, ...p }: IconProps) => (
+  <svg {...base(size)} {...stroke} strokeWidth={2.5} {...p}>
+    <path d="M6 6l12 12M18 6L6 18" />
+  </svg>
+)
+
+export const ExpandIcon = ({ size, ...p }: IconProps) => (
+  <svg {...base(size)} {...stroke} {...p}>
+    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+  </svg>
+)
