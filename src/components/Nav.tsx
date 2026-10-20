@@ -1,3 +1,5 @@
+'use client'
+
 import { navItems, profile } from '../data/content'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { GithubIcon, HeartIcon, LinkedinIcon, MailIcon, SmileIcon, navIcons } from './Icons'
