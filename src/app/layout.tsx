@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Gochi_Hand, Inter, Silkscreen, Space_Mono } from 'next/font/google'
+import 'lenis/dist/lenis.css'
 import '../styles/global.css'
+import { MotionProvider } from '../components/MotionProvider'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-inter' })
 const gochiHand = Gochi_Hand({ subsets: ['latin'], weight: '400', variable: '--font-gochi-hand' })
@@ -22,7 +24,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${gochiHand.variable} ${silkscreen.variable} ${spaceMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   )
 }

@@ -44,6 +44,10 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 64px;
 }
+/* Lenis drives smooth scrolling when it is active */
+html.lenis {
+  scroll-behavior: auto;
+}
 
 body {
   margin: 0;
@@ -111,6 +115,42 @@ img {
 .hand {
   font-family: var(--font-hand);
   font-weight: 400;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Dragged with Motion (fine pointers only), springs back on release */
+.is-draggable {
+  cursor: grab;
+  user-select: none;
+}
+.is-draggable:active {
+  cursor: grabbing;
+}
+
+.magnetic {
+  display: inline-block;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.float {
+  animation: float 4.5s ease-in-out infinite;
+}
+.float--late {
+  animation-delay: -2.2s;
 }
 
 .paper {
@@ -228,10 +268,6 @@ div.image-slot {
   border-radius: 50%;
   background: var(--pink);
   color: #fff;
-  transition: transform 0.2s;
-}
-.nav__logo:hover {
-  transform: rotate(-12deg);
 }
 .nav__tabs {
   display: flex;
@@ -239,6 +275,8 @@ div.image-slot {
   scrollbar-width: none;
 }
 .nav__tab {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -251,7 +289,10 @@ div.image-slot {
 .nav__tab:hover {
   background: var(--yellow-soft);
 }
-.nav__tab.is-active {
+.nav__tab-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--yellow);
 }
 .nav__right {
@@ -267,10 +308,6 @@ div.image-slot {
   height: 32px;
   border-radius: 50%;
   border: 1.5px solid var(--ink);
-  transition: transform 0.15s;
-}
-.nav__social:hover {
-  transform: translateY(-2px);
 }
 .nav__social--yellow {
   background: var(--yellow);
@@ -297,6 +334,17 @@ div.image-slot {
   background: var(--ink);
   color: #fff;
 }
+.nav__contact:hover .nav__heart {
+  animation: heartbeat 0.8s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  30% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+}
 
 @media (max-width: 700px) {
   .nav__left {
@@ -321,6 +369,8 @@ div.image-slot {
 }
 .hero__avatar {
   position: absolute;
+}
+.hero__avatar-disc {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -341,11 +391,15 @@ div.image-slot {
 .hero__avatar--left {
   left: 9%;
   top: 470px;
-  background: var(--yellow);
 }
 .hero__avatar--right {
   right: 9%;
   top: 430px;
+}
+.hero__avatar-disc--yellow {
+  background: var(--yellow);
+}
+.hero__avatar-disc--mint {
   background: var(--mint);
 }
 .hero__intro {
@@ -367,6 +421,14 @@ div.image-slot {
   font-size: clamp(48px, 9vw, 116px);
   line-height: 0.92;
   letter-spacing: 0.01em;
+}
+.hero__name-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.hero__letter {
+  display: inline-block;
+  cursor: default;
 }
 .tag {
   display: inline-block;
@@ -393,12 +455,10 @@ div.image-slot {
 .hero__tag--left {
   left: -150px;
   top: -22px;
-  transform: rotate(-3deg);
 }
 .hero__tag--right {
   right: -150px;
   top: -30px;
-  transform: rotate(3deg);
 }
 .hero__note {
   position: absolute;
@@ -461,6 +521,9 @@ div.image-slot {
     box-shadow: 0 0 0 0 rgba(47, 85, 212, 0);
   }
 }
+.hero__word {
+  display: inline-block;
+}
 .hero__headline {
   max-width: 760px;
   margin-top: 40px;
@@ -488,16 +551,14 @@ div.image-slot {
   width: 0.8em;
   height: 0.8em;
   vertical-align: middle;
-  transition: transform 0.6s;
 }
-.hero__headline:hover .badge-flower {
-  transform: rotate(180deg);
+.hero__cta {
+  margin-top: 36px;
 }
 .btn-contact {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 36px;
   padding: 6px 18px 6px 6px;
   min-height: 44px;
   background: var(--ink);
@@ -510,8 +571,12 @@ div.image-slot {
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 var(--blue);
 }
+.btn-contact:hover .btn-contact__icon {
+  transform: rotate(45deg);
+}
 .btn-contact__icon {
   display: flex;
+  transition: transform 0.3s;
   align-items: center;
   justify-content: center;
   width: 30px;
@@ -569,17 +634,9 @@ div.image-slot {
   padding: 10px 10px 8px;
   background: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
-  transition: transform 0.3s;
 }
 .polaroid--left {
   margin-top: 72px;
-  transform: rotate(-3deg);
-}
-.polaroid--right {
-  transform: rotate(2.5deg);
-}
-.polaroid:hover {
-  transform: rotate(0deg) scale(1.03);
 }
 .polaroid--left .polaroid__img {
   height: 210px;
@@ -609,9 +666,12 @@ div.image-slot {
   font-size: clamp(21px, 2.2vw, 26px);
   line-height: 1.55;
 }
+.about__sparkle-wrap {
+  display: inline-block;
+  vertical-align: -3px;
+}
 .about__sparkle {
   color: #e2a400;
-  vertical-align: -3px;
 }
 
 /* Zig-zag edged stamps */
@@ -860,6 +920,8 @@ div.image-slot {
   padding-bottom: 24px;
 }
 .browser {
+  position: relative;
+  will-change: transform;
   border: 1px solid #4a4842;
   background: #262522;
 }
@@ -907,17 +969,9 @@ div.image-slot {
   padding: calc(var(--w) * 0.03);
   border-radius: calc(var(--w) * 0.155);
   background: var(--ink);
-  transition: transform 0.3s;
-}
-.phone--a {
-  transform: rotate(-3deg);
-}
-.phone--b {
-  transform: rotate(3deg) translateY(24px);
 }
 .phone:only-of-type {
   --w: min(200px, 50vw);
-  transform: rotate(-2deg);
 }
 .phone__screen {
   height: auto;
@@ -945,7 +999,6 @@ div.image-slot {
   font-size: 17px;
   line-height: 1.25;
   white-space: pre-line;
-  transform: rotate(4deg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -1032,12 +1085,10 @@ div.image-slot {
 .note {
   padding: 22px 22px 26px;
   background: var(--note-bg);
-  transform: rotate(var(--tilt));
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: box-shadow 0.25s;
 }
 .note:hover {
-  transform: rotate(0deg) translateY(-4px);
   box-shadow: 0 12px 22px rgba(0, 0, 0, 0.14);
 }
 .note__title {
@@ -1144,10 +1195,14 @@ div.image-slot {
   font-size: clamp(48px, 8vw, 104px);
   line-height: 0.95;
 }
+.contact__letter {
+  display: inline-block;
+  cursor: default;
+}
 .contact__email {
+  position: relative;
   margin-top: 26px;
   padding: 6px 0;
-  border-bottom: 2px solid var(--yellow);
   font-size: clamp(18px, 2.4vw, 28px);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -1156,6 +1211,15 @@ div.image-slot {
 }
 .contact__email:hover {
   color: var(--yellow);
+}
+.contact__email-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--yellow);
+  transform-origin: 0 50%;
 }
 .contact__links {
   display: flex;

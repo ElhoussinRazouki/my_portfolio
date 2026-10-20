@@ -1,22 +1,34 @@
+'use client'
+
+import { motion } from 'motion/react'
 import { projects } from '../data/content'
 import { ProjectCard } from './ProjectCard'
+import { fadeUp, stagger, viewport } from './motion'
 
 export function Projects() {
   const live = projects.filter((p) => p.live).length
 
   return (
     <section id="projects" className="projects" aria-labelledby="projects-title">
-      <div className="projects__head">
+      <motion.div
+        className="projects__head"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={stagger(0.1)}
+      >
         <div>
-          <p className="hand projects__kicker">stuff I've shipped</p>
-          <h2 className="projects__title" id="projects-title">
+          <motion.p className="hand projects__kicker" variants={fadeUp}>
+            stuff I've shipped
+          </motion.p>
+          <motion.h2 className="projects__title" id="projects-title" variants={fadeUp}>
             Selected projects
-          </h2>
+          </motion.h2>
         </div>
-        <p className="mono projects__count">
+        <motion.p className="mono projects__count" variants={fadeUp}>
           {String(projects.length).padStart(2, '0')} projects · {live} in production
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       <div className="projects__stack">
         {projects.map((p) => (
