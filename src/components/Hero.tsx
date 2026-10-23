@@ -2,6 +2,7 @@
 
 import {
   motion,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -9,8 +10,10 @@ import {
   type MotionValue,
   type Variants,
 } from 'motion/react'
+import Image from 'next/image'
 import { createContext, useContext, useRef, type ReactNode } from 'react'
 import { profile } from '../data/content'
+import { IMAGE_QUALITY } from './Decor'
 import { ArrowUpRightIcon, CodeSlashIcon } from './Icons'
 import { Magnetic } from './Magnetic'
 import { ease, spring, springSnappy } from './motion'
@@ -82,7 +85,8 @@ const letter: Variants = {
 
 const word: Variants = {
   hidden: { opacity: 0, y: '0.45em', filter: 'blur(10px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease } },
+  // A leftover blur(0px) would keep a filter on the word for good; drop it once it is sharp.
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease }, transitionEnd: { filter: 'none' } },
 }
 
 const badge: Variants = {
@@ -115,6 +119,7 @@ export function Hero() {
   const [tagA, tagB] = profile.heroTags
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { initial: true })
 
   const px = useMotionValue(0)
   const py = useMotionValue(0)
@@ -129,7 +134,7 @@ export function Hero() {
     <PointerContext.Provider value={pointer}>
       <section
         id="top"
-        className="hero"
+        className={`hero${inView ? '' : ' is-offscreen'}`}
         ref={ref}
         onPointerMove={(e) => {
           if (reduce || e.pointerType !== 'mouse' || !ref.current) return
@@ -144,7 +149,7 @@ export function Hero() {
       >
         <Deco depth={-60} delay={1.05} className="hero__avatar hero__avatar--left hero-deco">
           <div className="hero__avatar-disc hero__avatar-disc--yellow float">
-            <img className="hero__avatar-img" src={profile.avatar} alt="" />
+            <Image className="hero__avatar-img" src={profile.avatar} alt="" sizes="52px" quality={IMAGE_QUALITY} loading="eager" />
           </div>
         </Deco>
         <Deco depth={-80} delay={1.15} className="hero__avatar hero__avatar--right hero-deco">

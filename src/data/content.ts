@@ -2,10 +2,20 @@
  * All portfolio copy lives here. Edit this file to update the site —
  * components only handle layout and styling.
  *
- * Images: drop files into /public (e.g. /public/projects/aevo-1.png) and
- * reference them with a leading slash ("/projects/aevo-1.png"). Any slot
- * left empty renders a striped placeholder with its label.
+ * Images: drop files into /public (e.g. /public/projects/aevo-1.png) and import
+ * them below; imported images are resized for each slot by next/image. A plain
+ * path with a leading slash ("/projects/aevo-1.png") also works but is served
+ * at full size. Any slot left empty renders a striped placeholder with its label.
  */
+
+import type { StaticImageData } from 'next/image'
+import avatar from '../../public/avatar.png'
+import products from '../../public/products.webp'
+import aevo1 from '../../public/projects/aevo-1.webp'
+import aevo2 from '../../public/projects/aevo-2.webp'
+import ctrbuddy from '../../public/projects/ctrbuddy.jpg'
+import mobtwin from '../../public/projects/mobtwin.webp'
+import studyTime1 from '../../public/projects/study-time-1.png'
 
 export const profile = {
   name: 'El Houssin Razouki',
@@ -20,11 +30,11 @@ export const profile = {
   cvUrl: '/El_Houssin_Razouki_Resume.pdf',
   heroTags: ['Ships AI agents', 'Solo founder x3'],
   /** Small round photo in the hero */
-  avatar: '/avatar.png',
-  photo: '/avatar.png',
+  avatar,
+  photo: avatar,
   photoCaption: 'me, 2026',
   /** Second polaroid in About: the products I run */
-  productsPhoto: '/products.webp',
+  productsPhoto: products,
   productsCaption: 'the three I run',
 }
 
@@ -66,7 +76,7 @@ export interface Project {
     /** Labels shown on placeholders; one entry per frame */
     labels: string[]
     /** Image paths matching labels by index */
-    images?: string[]
+    images?: (string | StaticImageData)[]
   }
   /** Put the media on the left */
   reverse?: boolean
@@ -93,7 +103,7 @@ export const projects: Project[] = [
     ],
     tech: ['Next.js', 'Convex', 'MCP', 'LLM + image APIs'],
     href: 'https://ctrbuddy.com',
-    media: { kind: 'browser', labels: ['CTRBuddy screenshot'], images: ['/projects/ctrbuddy.jpg'] },
+    media: { kind: 'browser', labels: ['CTRBuddy screenshot'], images: [ctrbuddy] },
   },
   {
     id: 'aevo',
@@ -115,7 +125,7 @@ export const projects: Project[] = [
     media: {
       kind: 'phones',
       labels: ['Aevo screen 1', 'Aevo screen 2'],
-      images: ['/projects/aevo-1.webp', '/projects/aevo-2.webp'],
+      images: [aevo1, aevo2],
     },
   },
   {
@@ -135,7 +145,7 @@ export const projects: Project[] = [
     ],
     tech: ['Expo', 'SwiftUI', 'Convex vector search', 'Screen Time API'],
     href: 'https://apps.apple.com/us/app/study-time-ai-app-blocker/id6757340083',
-    media: { kind: 'phones', labels: ['Study Time screen'], images: ['/projects/study-time-1.png'] },
+    media: { kind: 'phones', labels: ['Study Time screen'], images: [studyTime1] },
     reverse: true,
     note: 'study first,\nscroll later :)',
   },
@@ -154,7 +164,7 @@ export const projects: Project[] = [
     ],
     tech: ['Elasticsearch', 'GraphQL', 'MongoDB replica sets', 'Node workers'],
     href: 'https://www.linkedin.com/posts/ai-wolves_excited-to-introduce-mobtwin-the-ultimate-activity-7330205407010770944-GfgU',
-    media: { kind: 'browser', labels: ['MobTwin screenshot'], images: ['/projects/mobtwin.webp'] },
+    media: { kind: 'browser', labels: ['MobTwin screenshot'], images: [mobtwin] },
   },
 ]
 

@@ -1,8 +1,10 @@
 'use client'
 
+import { getImageProps } from 'next/image'
 import type { CSSProperties } from 'react'
+import { preload } from 'react-dom'
 import type { Project } from '../data/content'
-import { ImageSlot } from './Decor'
+import { IMAGE_QUALITY, ImageSlot } from './Decor'
 import { ArrowUpRightIcon, ExpandIcon } from './Icons'
 import { TapedSheet } from './TapedSheet'
 
@@ -15,6 +17,21 @@ export function PreviewTrigger({ project, onOpen }: { project: Project; onOpen: 
       </span>
     </button>
   )
+}
+
+/** Rendered width of the enlarged media (see .sheet-dialog--browser and .preview-phones in global.css). */
+const previewSizes = {
+  browser: '(max-width: 1120px) 100vw, 1120px',
+  phones: '(max-width: 600px) 50vw, 300px',
+}
+
+/** Fetches the enlarged images ahead of time, so the sheet never lands with an empty frame. */
+export function preloadPreview({ media }: Project) {
+  for (const src of media.images ?? []) {
+    if (typeof src === 'string') continue
+    const { props } = getImageProps({ src, alt: '', sizes: previewSizes[media.kind], quality: IMAGE_QUALITY })
+    preload(props.src, { as: 'image', imageSrcSet: props.srcSet, imageSizes: props.sizes, fetchPriority: 'low' })
+  }
 }
 
 /** The project's browser window or phones, pinned large on a taped sheet. */
@@ -45,13 +62,19 @@ export function ProjectPreview({ project, open, onClose }: { project: Project; o
             <span />
             <span />
           </div>
-          <ImageSlot src={media.images?.[0]} label={media.labels[0]} tone={light ? 'mint' : 'dark'} className="browser__screen" />
+          <ImageSlot
+            src={media.images?.[0]}
+            label={media.labels[0]}
+            tone={light ? 'mint' : 'dark'}
+            sizes={previewSizes.browser}
+            className="browser__screen"
+          />
         </div>
       ) : (
         <div className="preview-phones" style={{ '--count': media.labels.length } as CSSProperties}>
           {media.labels.map((label, i) => (
             <div key={label} className="phone">
-              <ImageSlot src={media.images?.[i]} label={label} tone="dark" className="phone__screen" />
+              <ImageSlot src={media.images?.[i]} label={label} tone="dark" sizes={previewSizes.phones} className="phone__screen" />
               <span className="phone__island" aria-hidden="true" />
             </div>
           ))}

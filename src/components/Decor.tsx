@@ -1,6 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion, type Variants } from 'motion/react'
+import Image, { type StaticImageData } from 'next/image'
 import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useFinePointer } from '../hooks/usePointer'
 import { ease, fadeUp, spring, springSoft, stagger, stampIn, viewport } from './motion'
@@ -71,19 +72,40 @@ export function Tape({
   )
 }
 
-/** Image if `src` is set, otherwise a striped placeholder showing `label`. */
+/** Quality for resized images; must be listed in `images.qualities` in next.config.ts. */
+export const IMAGE_QUALITY = 85
+
+/**
+ * Image if `src` is set, otherwise a striped placeholder showing `label`.
+ * Imported images are resized to the slot's `sizes`, so the browser never decodes a full-size original.
+ */
 export function ImageSlot({
   src,
   label,
   tone = 'light',
+  sizes,
   className = '',
 }: {
-  src?: string
+  src?: string | StaticImageData
   label: string
   tone?: 'light' | 'dark' | 'mint'
+  /** Rendered width, as in the `sizes` attribute */
+  sizes?: string
   className?: string
 }) {
-  if (src) return <img className={`image-slot ${className}`} src={src} alt={label} loading="lazy" draggable={false} />
+  if (typeof src === 'string')
+    return <img className={`image-slot ${className}`} src={src} alt={label} loading="lazy" draggable={false} />
+  if (src)
+    return (
+      <Image
+        className={`image-slot ${className}`}
+        src={src}
+        alt={label}
+        sizes={sizes}
+        quality={IMAGE_QUALITY}
+        draggable={false}
+      />
+    )
   return (
     <div className={`image-slot image-slot--${tone} ${className}`} role="img" aria-label={`${label} (placeholder)`}>
       <span className="mono">[{label}]</span>
@@ -133,7 +155,7 @@ export function Polaroid({
   className = '',
   children,
 }: {
-  src?: string
+  src?: string | StaticImageData
   label: string
   caption: string
   tone?: 'light' | 'dark'
@@ -195,7 +217,7 @@ export function Polaroid({
           />
         )}
       </AnimatePresence>
-      <ImageSlot src={src} label={label} tone={tone} className="polaroid__img" />
+      <ImageSlot src={src} label={label} tone={tone} sizes="180px" className="polaroid__img" />
       <figcaption className="hand polaroid__caption">{caption}</figcaption>
       {children}
     </motion.figure>

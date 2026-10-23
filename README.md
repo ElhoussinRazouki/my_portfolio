@@ -18,10 +18,11 @@ All copy lives in **`src/data/content.ts`**: profile, about, projects, experienc
 ### Add your images
 
 1. Put files in `public/` (for example `public/me.jpg` or `public/projects/aevo-1.png`).
-2. Reference them in `content.ts` with a leading slash:
-   - `profile.photo = '/me.jpg'`
-   - `profile.deskPhoto = '/desk.jpg'`
-   - `projects[i].media.images = ['/projects/aevo-1.png', '/projects/aevo-2.png']`
+2. Import them at the top of `content.ts` and use the import, so `next/image` serves each slot a resized copy:
+   - `import me from '../../public/me.jpg'` then `profile.photo = me`
+   - `import aevo1 from '../../public/projects/aevo-1.png'` then `projects[i].media.images = [aevo1]`
+
+   A plain path with a leading slash (`'/me.jpg'`) still works, but the full-size file is sent to every visitor.
 
 Any slot left empty shows a striped placeholder with its label.
 

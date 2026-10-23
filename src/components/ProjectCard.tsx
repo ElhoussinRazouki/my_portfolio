@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, useScroll, useTransform, type Variants } from 'motion/react'
+import type { StaticImageData } from 'next/image'
 import { useRef, useState, type CSSProperties } from 'react'
 import type { Project, ProjectTheme } from '../data/content'
 import { useTilt } from '../hooks/usePointer'
@@ -8,7 +9,7 @@ import { CountUp } from './CountUp'
 import { ImageSlot, Tape } from './Decor'
 import { ArrowUpRightIcon } from './Icons'
 import { ease, fadeUp, spring, stagger, viewport } from './motion'
-import { PreviewTrigger, ProjectPreview } from './ProjectPreview'
+import { PreviewTrigger, ProjectPreview, preloadPreview } from './ProjectPreview'
 
 const themes: Record<ProjectTheme, CSSProperties> = {
   dark: {
@@ -57,7 +58,7 @@ function useParallax(distance: number, offset = 0) {
 }
 
 /** Each phone carries its own strip of tape, so the tape always sits on the phone it holds. */
-function Phone({ label, src, index }: { label: string; src?: string; index: number }) {
+function Phone({ label, src, index }: { label: string; src?: string | StaticImageData; index: number }) {
   const even = index % 2 === 0
   const rotate = even ? -3 : 3
 
@@ -71,7 +72,7 @@ function Phone({ label, src, index }: { label: string; src?: string; index: numb
       transition={{ ...spring, delay: 0.15 + index * 0.12 }}
     >
       <Tape color="white" rotate={even ? -4 : 5} delay={0.9 + index * 0.1} style={{ left: '50%', top: -10, width: 70, marginLeft: -35 }} />
-      <ImageSlot src={src} label={label} tone="dark" className="phone__screen" />
+      <ImageSlot src={src} label={label} tone="dark" sizes="(max-width: 400px) 50vw, 200px" className="phone__screen" />
       <span className="phone__island" aria-hidden="true" />
     </motion.div>
   )
@@ -84,7 +85,13 @@ function Browser({ project, onOpen }: { project: Project; onOpen: () => void }) 
   const light = theme === 'mint' || theme === 'yellow'
 
   return (
-    <motion.div ref={ref} className="project__media" style={{ y }}>
+    <motion.div
+      ref={ref}
+      className="project__media"
+      style={{ y }}
+      viewport={{ once: true }}
+      onViewportEnter={() => preloadPreview(project)}
+    >
       <motion.div
         className={`browser${light ? ' browser--light' : ''}`}
         initial={{ opacity: 0, x: project.reverse ? -60 : 60, rotate: project.reverse ? -3 : 3 }}
@@ -104,6 +111,7 @@ function Browser({ project, onOpen }: { project: Project; onOpen: () => void }) 
           src={media.images?.[0]}
           label={media.labels[0]}
           tone={light ? 'mint' : 'dark'}
+          sizes="(max-width: 900px) 100vw, 50vw"
           className="browser__screen"
         />
         <PreviewTrigger project={project} onOpen={onOpen} />
@@ -117,7 +125,13 @@ function Phones({ project, onOpen }: { project: Project; onOpen: () => void }) {
   const { ref, y } = useParallax(36)
 
   return (
-    <motion.div ref={ref} className="project__media project__media--phones" style={{ y }}>
+    <motion.div
+      ref={ref}
+      className="project__media project__media--phones"
+      style={{ y }}
+      viewport={{ once: true }}
+      onViewportEnter={() => preloadPreview(project)}
+    >
       {media.labels.map((label, i) => (
         <Phone key={label} label={label} src={media.images?.[i]} index={i} />
       ))}

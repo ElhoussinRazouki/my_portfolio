@@ -1,12 +1,16 @@
 'use client'
 
-import { motion } from 'motion/react'
+import { motion, useInView } from 'motion/react'
+import { useRef } from 'react'
 import { about, profile } from '../data/content'
 import { Polaroid } from './Decor'
 import { SparkleIcon, stampIcons } from './Icons'
 import { draw, fadeUp, stagger, stampIn, viewport } from './motion'
 
 export function About() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref)
+
   return (
     <>
       <motion.svg
@@ -21,7 +25,12 @@ export function About() {
         <motion.path d="M0 38 Q620 -14 1240 38" variants={draw} />
       </motion.svg>
 
-      <section id="about" className="about" aria-labelledby="about-title">
+      <section
+        id="about"
+        ref={ref}
+        className={`about${inView ? '' : ' is-offscreen'}`}
+        aria-labelledby="about-title"
+      >
         <motion.p
           className="hand about__label"
           initial={{ opacity: 0, x: -24, rotate: -4 }}
@@ -53,13 +62,10 @@ export function About() {
             </motion.h2>
             <motion.p className="hand about__text" variants={fadeUp}>
               {about.intro}{' '}
-              <motion.span
-                className="about__sparkle-wrap"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, ease: 'linear', repeat: Infinity }}
-              >
+              {/* Spun by a CSS animation so it stays on the compositor */}
+              <span className="about__sparkle-wrap">
                 <SparkleIcon size={22} className="about__sparkle" />
-              </motion.span>{' '}
+              </span>{' '}
               {about.body}
             </motion.p>
 
