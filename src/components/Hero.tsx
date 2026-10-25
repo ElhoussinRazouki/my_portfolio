@@ -3,8 +3,10 @@
 import {
   motion,
   useInView,
+  useMotionValueEvent,
   useMotionValue,
   useReducedMotion,
+  useScroll,
   useSpring,
   useTransform,
   type MotionValue,
@@ -13,12 +15,13 @@ import {
 import Image from 'next/image'
 import { createContext, useContext, useRef, type ReactNode } from 'react'
 import { profile } from '../data/content'
+import { useFinePointer } from '../hooks/usePointer'
 import { IMAGE_QUALITY } from './Decor'
 import { ArrowUpRightIcon, CodeSlashIcon } from './Icons'
 import { Magnetic } from './Magnetic'
 import { ease, spring, springSnappy } from './motion'
 
-/** Normalised cursor position over the hero (-0.5 … 0.5), smoothed. */
+/** Normalised cursor position over the hero (-0.5 … 0.5), smoothed. Driven by scrolling on touch screens. */
 const PointerContext = createContext<{ x: MotionValue<number>; y: MotionValue<number> } | null>(null)
 
 /** Decorative piece that pops in, then drifts with the cursor. Higher `depth` = moves more. */
@@ -128,6 +131,15 @@ export function Hero() {
     y: useSpring(py, { stiffness: 60, damping: 18 }),
   }
 
+  // Without a cursor to follow, the pieces drift apart as the hero scrolls away instead.
+  const finePointer = useFinePointer()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (reduce || finePointer) return
+    px.set(v * 0.25)
+    py.set(v * 0.5)
+  })
+
   let letterIndex = 0
 
   return (
@@ -142,7 +154,8 @@ export function Hero() {
           px.set((e.clientX - r.left) / r.width - 0.5)
           py.set((e.clientY - r.top) / r.height - 0.5)
         }}
-        onPointerLeave={() => {
+        onPointerLeave={(e) => {
+          if (e.pointerType !== 'mouse') return
           px.set(0)
           py.set(0)
         }}

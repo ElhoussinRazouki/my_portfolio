@@ -128,10 +128,12 @@ img {
   white-space: nowrap;
 }
 
-/* Dragged with Motion (fine pointers only), springs back on release */
+/* Dragged with Motion, springs back on release. Touch lifts after a short hold (useHoldToDrag). */
 .is-draggable {
   cursor: grab;
+  -webkit-user-select: none;
   user-select: none;
+  -webkit-touch-callout: none;
 }
 .is-draggable:active {
   cursor: grabbing;
@@ -1119,6 +1121,9 @@ div.image-slot {
 }
 .note:hover {
   box-shadow: 0 12px 22px rgba(0, 0, 0, 0.14);
+}
+.note.is-held {
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.2);
 }
 .note__title {
   font-size: 26px;

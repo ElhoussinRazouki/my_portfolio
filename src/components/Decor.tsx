@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, type Variants } from 'motion/react'
 import Image, { type StaticImageData } from 'next/image'
 import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
-import { useFinePointer } from '../hooks/usePointer'
+import { useHoldToDrag } from '../hooks/usePointer'
 import { ease, fadeUp, spring, springSoft, stagger, stampIn, viewport } from './motion'
 
 type TapeColor = 'blue' | 'yellow' | 'white' | 'clear'
@@ -163,25 +163,28 @@ export function Polaroid({
   className?: string
   children?: ReactNode
 }) {
-  const draggable = useFinePointer()
-  // `held` covers the whole lift: from the first drag movement until the snap back has finished.
-  const [held, setHeld] = useState(false)
+  // `dragged` covers the whole lift: from the first drag movement until the snap back has finished.
+  const [dragged, setDragged] = useState(false)
   const [moved, setMoved] = useState(false)
   const dragging = useRef(false)
+  // A touch hold peels the tape before the photo moves, so the finger can tell it has a grip.
+  const hold = useHoldToDrag<HTMLElement>({ onLift: () => setMoved(true) })
+  const held = dragged || hold.held
 
   return (
     <motion.figure
-      className={`polaroid ${draggable ? 'is-draggable ' : ''}${className}`}
+      ref={hold.ref}
+      className={`polaroid is-draggable ${className}`}
       custom={rotate}
       variants={polaroidVariants}
       whileHover={{ rotate: 0, scale: 1.04, transition: spring }}
-      drag={draggable}
+      {...hold.dragProps}
       dragSnapToOrigin
       dragElastic={0.4}
       whileDrag={{ scale: 1.08, rotate: rotate * -1.5, zIndex: 10, boxShadow: '0 22px 40px rgba(0, 0, 0, 0.22)' }}
       onDragStart={() => {
         dragging.current = true
-        setHeld(true)
+        setDragged(true)
         setMoved(true)
       }}
       onDragEnd={() => {
@@ -189,7 +192,7 @@ export function Polaroid({
       }}
       onDragTransitionEnd={() => {
         // Also fires when a new grab interrupts the snap back; the photo is still in hand then.
-        if (!dragging.current) setHeld(false)
+        if (!dragging.current) setDragged(false)
       }}
     >
       <AnimatePresence>
