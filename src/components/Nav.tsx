@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { navItems, profile } from '../data/content'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { GithubIcon, HeartIcon, LinkedinIcon, MailIcon, SmileIcon, navIcons } from './Icons'
@@ -13,6 +14,18 @@ const socialTap = { scale: 0.9 }
 
 export function Nav() {
   const active = useActiveSection(sectionIds)
+  const reduce = useReducedMotion()
+  const tabsRef = useRef<HTMLUListElement>(null)
+
+  // On a narrow screen the tabs overflow sideways; bring the active one to the middle of the row.
+  useEffect(() => {
+    const list = tabsRef.current
+    const tab = list?.querySelector('.is-active')
+    if (!list || !tab || list.scrollWidth <= list.clientWidth) return
+    const l = list.getBoundingClientRect()
+    const t = tab.getBoundingClientRect()
+    list.scrollTo({ left: list.scrollLeft + t.left - l.left - (l.width - t.width) / 2, behavior: reduce ? 'auto' : 'smooth' })
+  }, [active, reduce])
 
   return (
     <motion.nav
@@ -32,7 +45,7 @@ export function Nav() {
         >
           <SmileIcon size={18} />
         </motion.a>
-        <ul className="nav__tabs">
+        <ul className="nav__tabs" ref={tabsRef}>
           {navItems.map((item) => {
             const Icon = navIcons[item.icon]
             const isActive = active === item.id

@@ -3,16 +3,18 @@
 import Lenis from 'lenis'
 import { MotionConfig, useReducedMotion } from 'motion/react'
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { useFingerHover } from '../hooks/useFingerHover'
 
 const LenisContext = createContext<Lenis | null>(null)
 
 /** The page's Lenis instance (null when reduced motion is on). Use it to pause scrolling under a dialog. */
 export const useLenis = () => useContext(LenisContext)
 
-/** Smooth scrolling (Lenis) plus a global reduced-motion switch for every Motion component. */
+/** Smooth scrolling (Lenis), hover for fingers, and a global reduced-motion switch for every Motion component. */
 export function MotionProvider({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion()
   const [lenis, setLenis] = useState<Lenis | null>(null)
+  useFingerHover()
 
   useEffect(() => {
     if (reduce) return

@@ -128,6 +128,9 @@ img {
   white-space: nowrap;
 }
 
+/* Hover styles come in pairs: `:hover` for a mouse and `[data-hover]` for a finger (useFingerHover).
+   After a touch <html> gets `data-touch`, which turns the native one off so a tapped element doesn't stay hovered. */
+
 /* Dragged with Motion, springs back on release. Touch lifts after a short hold (useHoldToDrag). */
 .is-draggable {
   cursor: grab;
@@ -300,7 +303,8 @@ div.image-slot {
   white-space: nowrap;
   transition: background-color 0.15s;
 }
-.nav__tab:hover {
+:where(:root:not([data-touch])) .nav__tab:hover,
+.nav__tab[data-hover] {
   background: var(--yellow-soft);
 }
 .nav__tab-bg {
@@ -344,11 +348,13 @@ div.image-slot {
   text-decoration: none;
   transition: background-color 0.15s, color 0.15s;
 }
-.nav__contact:hover {
+:where(:root:not([data-touch])) .nav__contact:hover,
+.nav__contact[data-hover] {
   background: var(--ink);
   color: #fff;
 }
-.nav__contact:hover .nav__heart {
+:where(:root:not([data-touch])) .nav__contact:hover .nav__heart,
+.nav__contact[data-hover] .nav__heart {
   animation: heartbeat 0.8s ease-in-out infinite;
 }
 @keyframes heartbeat {
@@ -443,6 +449,13 @@ div.image-slot {
 .hero__letter {
   display: inline-block;
   cursor: default;
+}
+/* A finger can scrub sideways along the letter rows to bounce each letter; vertical swipes still scroll. */
+.hero__name,
+.contact__title {
+  touch-action: pan-y pinch-zoom;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .tag {
   display: inline-block;
@@ -591,11 +604,13 @@ div.image-slot {
   letter-spacing: 0.1em;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.btn-contact:hover {
+:where(:root:not([data-touch])) .btn-contact:hover,
+.btn-contact[data-hover] {
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 var(--blue);
 }
-.btn-contact:hover .btn-contact__icon {
+:where(:root:not([data-touch])) .btn-contact:hover .btn-contact__icon,
+.btn-contact[data-hover] .btn-contact__icon {
   transform: rotate(45deg);
 }
 .btn-contact__icon {
@@ -732,7 +747,8 @@ div.image-slot {
     conic-gradient(from 225deg at right, #0000, #000 1deg 89deg, #0000 90deg) right / 51% 10px repeat-y;
   transition: transform 0.2s;
 }
-.stamps__pair:hover .stamp {
+:where(:root:not([data-touch])) .stamps__pair:hover .stamp,
+.stamps__pair[data-hover] .stamp {
   transform: rotate(-2deg);
 }
 .stamp--icon {
@@ -934,7 +950,8 @@ div.image-slot {
 .link-arrow svg {
   transition: transform 0.15s;
 }
-.link-arrow:hover svg {
+:where(:root:not([data-touch])) .link-arrow:hover svg,
+.link-arrow[data-hover] svg {
   transform: translate(2px, -2px);
 }
 
@@ -1119,7 +1136,8 @@ div.image-slot {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.25s;
 }
-.note:hover {
+:where(:root:not([data-touch])) .note:hover,
+.note[data-hover] {
   box-shadow: 0 12px 22px rgba(0, 0, 0, 0.14);
 }
 .note.is-held {
@@ -1206,7 +1224,8 @@ div.image-slot {
   cursor: pointer;
   transition: background-color 0.15s;
 }
-.certs__item:hover {
+:where(:root:not([data-touch])) .certs__item:hover,
+.certs__item[data-hover] {
   background: var(--yellow-soft);
 }
 .certs__name {
@@ -1220,13 +1239,15 @@ div.image-slot {
   color: var(--muted);
   transition: color 0.15s;
 }
-.certs__item:hover .certs__view {
+:where(:root:not([data-touch])) .certs__item:hover .certs__view,
+.certs__item[data-hover] .certs__view {
   color: var(--ink);
 }
 .certs__item svg {
   transition: transform 0.15s;
 }
-.certs__item:hover .certs__view svg {
+:where(:root:not([data-touch])) .certs__item:hover .certs__view svg,
+.certs__item[data-hover] .certs__view svg {
   transform: translate(2px, -2px);
 }
 .certs__swatch {
@@ -1277,7 +1298,8 @@ div.image-slot {
   text-decoration: none;
   overflow-wrap: anywhere;
 }
-.contact__email:hover {
+:where(:root:not([data-touch])) .contact__email:hover,
+.contact__email[data-hover] {
   color: var(--yellow);
 }
 .contact__email-line {
@@ -1306,7 +1328,8 @@ div.image-slot {
   text-decoration: none;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.pill-btn:hover {
+:where(:root:not([data-touch])) .pill-btn:hover,
+.pill-btn[data-hover] {
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 #fff;
 }
@@ -1382,7 +1405,8 @@ div.image-slot {
   align-items: center;
   gap: 10px;
 }
-.sheet-dialog .pill-btn:hover {
+:where(:root:not([data-touch])) .sheet-dialog .pill-btn:hover,
+.sheet-dialog .pill-btn[data-hover] {
   box-shadow: 4px 4px 0 var(--ink);
 }
 .sheet-dialog__close {
@@ -1397,7 +1421,8 @@ div.image-slot {
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
 }
-.sheet-dialog__close:hover {
+:where(:root:not([data-touch])) .sheet-dialog__close:hover,
+.sheet-dialog__close[data-hover] {
   background: var(--ink);
   color: #fff;
 }
@@ -1462,7 +1487,8 @@ div.image-slot {
   transform: translateY(6px);
   transition: opacity 0.2s, transform 0.2s;
 }
-.media-zoom:hover .media-zoom__hint,
+:where(:root:not([data-touch])) .media-zoom:hover .media-zoom__hint,
+.media-zoom[data-hover] .media-zoom__hint,
 .media-zoom:focus-visible .media-zoom__hint {
   opacity: 1;
   transform: none;
